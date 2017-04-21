@@ -13,10 +13,22 @@ const ModalSection = ({
     validateFields,
     getFieldsValue,
     getFieldDecorator,
+    resetFields,
   },
 }) => {
+  const onOkData = () => {
+    validateFields((err) => {
+      if (err) return;
+      const data = {
+        ...getFieldsValue(),
+      };
+      onOk(data);
+      resetFields();
+    });
+  };
 
-  const modalTextType = type === 'add' ? 'Crear' : 'Editar';
+  const ntype = type === '' ? 'add' : type;
+  const modalTextType = ntype === 'add' ? 'Crear' : 'Editar';
   const modalProps = {
     title: `${modalTextType} sección`,
     okText: modalTextType,
@@ -24,7 +36,7 @@ const ModalSection = ({
     maskClosable: false,
     cancelText: 'Cancelar',
     visible,
-    onOk,
+    onOk: onOkData,
     onCancel,
   };
 
@@ -34,7 +46,7 @@ const ModalSection = ({
         <Item label="Título de sección" extra="ejempls...">
           {
             getFieldDecorator('sectionName', {
-              initialValue: '',
+              initialValue: null,
               rules: [
                 {
                   required: true,

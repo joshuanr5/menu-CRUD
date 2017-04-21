@@ -2,30 +2,37 @@ import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
 import ModalSection from './ModalSection';
+import MenuList from './MenuList';
 
 const Menu = ({ dispatch, menu }) => {
   const { sections, modalType, modalVisible, modalShow } = menu;
   const sectionId = '';
-  console.log(menu);
 
-  function onAddSection() {
-    dispatch({
-      type: 'menu/showModal',
-      payload: {
-        modalType: 'add',
-        modalShow: 'sections',
-      },
-    });
-  }
-  function onEditSection() {
-
-  }
+  const menuListProps = {
+    sections,
+    onAddSection() {
+      dispatch({
+        type: 'menu/showModal',
+        payload: {
+          modalType: 'add',
+          modalShow: 'sections',
+        },
+      });
+    },
+    onEditSection() {
+      console.log('editSection');
+    },
+  };
 
   const menuModalSectionProps = {
+    // item: ...
     visible: modalVisible && modalShow === 'sections',
     type: modalType,
-    onOk() {
-      console.log('OK');
+    onOk(data) {
+      dispatch({
+        type: 'menu/addSection',
+        payload: data,
+      });
     },
     onCancel() {
       dispatch({
@@ -37,8 +44,8 @@ const Menu = ({ dispatch, menu }) => {
 
   return (
     <div>
-      <Button type="primary" onClick={onAddSection} >Crear sección</Button>
-      <ModalSection {... menuModalSectionProps} />
+      <MenuList {...menuListProps} />
+      <ModalSection {...menuModalSectionProps} />
     </div>
   );
 };

@@ -24,12 +24,22 @@
 //   modalShow: 'Section',
 //   modalVisible: false,
 // };
+import uuid from 'uuid';
+import { message } from 'antd';
 
 const initialState = {
   modalType: '', // add || delete || edit
   modalShow: '', // sections, products
   modalVisible: false,
 };
+
+function newSection(sectionName) {
+  return {
+    id: uuid(),
+    sectionName,
+    products: [],
+  };
+}
 
 export default {
   namespace: 'menu',
@@ -40,6 +50,17 @@ export default {
   subscriptions: {},
   effects: {},
   reducers: {
+    addSection(state, { payload }) {
+      const { sectionName } = payload;
+      const { sections } = state;
+      const newSections = Object.assign([], sections, [...sections, newSection(sectionName)]);
+      message.success('Se agregó la sección correctamente');
+      return {
+        ...state,
+        ...initialState,
+        sections: newSections,
+      };
+    },
     showModal(state, { payload }) {
       return {
         ...state,
