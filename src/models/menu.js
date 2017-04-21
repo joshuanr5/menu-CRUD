@@ -25,15 +25,33 @@
 //   modalVisible: false,
 // };
 
+const initialState = {
+  modalType: '', // add || delete || edit
+  modalShow: '', // sections, products
+  modalVisible: false,
+};
+
 export default {
   namespace: 'menu',
   state: {
     sections: [],
-    modalType: '', // add || delete || edit
-    modalShow: '', // sections, products
-    modalVisible: false,
+    ...initialState,
   },
   subscriptions: {},
   effects: {},
-  reducers: {},
+  reducers: {
+    showModal(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+        modalVisible: true,
+      };
+    },
+    closeModal(state) {
+      return {
+        ...state,
+        ...initialState,
+      };
+    },
+  },
 };
