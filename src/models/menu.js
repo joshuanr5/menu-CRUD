@@ -139,6 +139,30 @@ export default {
         }),
       };
     },
+    editProduct(state, { payload }) {
+      console.log(payload);
+      const { data, sectionId, productId } = payload;
+      const { sections } = state;
+      return {
+        ...state,
+        ...initialState,
+        sections: sections.map((section) => {
+          if (section.id === sectionId) {
+            const { products } = section;
+            return {
+              ...section,
+              products: products.map((product) => {
+                if (product.id === productId) {
+                  return Object.assign({}, product, data);
+                }
+                return product;
+              }),
+            };
+          }
+          return section;
+        }),
+      };
+    },
     showModal(state, { payload }) {
       return {
         ...state,

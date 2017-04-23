@@ -101,6 +101,8 @@ const Menu = ({ dispatch, menu }) => {
         type: `menu/${type}Product`,
         payload: {
           data,
+          sectionId: menu.currentSectionId,
+          productId: currentProductId,
         },
       });
     },
