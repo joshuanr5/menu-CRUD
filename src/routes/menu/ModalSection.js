@@ -4,7 +4,7 @@ import { Modal, Form, Input } from 'antd';
 const Item = Form.Item;
 
 const ModalSection = ({
-  // item = {},
+  item = {},
   visible,
   type,
   onOk,
@@ -22,7 +22,7 @@ const ModalSection = ({
       const data = {
         ...getFieldsValue(),
       };
-      onOk(data);
+      onOk(data, type);
       resetFields();
     });
   };
@@ -37,7 +37,10 @@ const ModalSection = ({
     cancelText: 'Cancelar',
     visible,
     onOk: onOkData,
-    onCancel,
+    onCancel() {
+      onCancel();
+      resetFields();
+    },
   };
 
   return (
@@ -46,7 +49,7 @@ const ModalSection = ({
         <Item label="Título de sección" extra="ejempls...">
           {
             getFieldDecorator('sectionName', {
-              initialValue: null,
+              initialValue: item.sectionName,
               rules: [
                 {
                   required: true,
