@@ -3,6 +3,7 @@ import { Router } from 'dva/router';
 
 import App from './routes/App';
 import Menu from './routes/menu';
+import Local from './routes/business';
 
 const cached = {};
 function registerModel(app, model) {
@@ -21,6 +22,9 @@ export default ({ history }) => {
         {
           path: 'menu',
           component: Menu,
+        }, {
+          path: 'local',
+          component: Local,
         },
       ],
     },
