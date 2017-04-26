@@ -1,11 +1,15 @@
 import React from 'react';
-import { Form, Input, InputNumber, Icon, Select, Button, Upload, Modal, Alert, Spin, Switch, Col, TimePicker } from 'antd';
+import { Form, Input, InputNumber, Icon, Select, Button, Upload, Modal, Alert, Spin, Switch, Col, Row, TimePicker, Checkbox } from 'antd';
 import moment from 'moment';
 import FormMap from '../../components/map';
 import UploadButton from '../../components/common/upload-button';
 import { getInitialFileList, getUrlFromFileList } from '../../lib/helpers';
+import omit from 'lodash/omit';
 
 const InputGroup = Input.Group;
+const CheckboxGroup = Checkbox.Group;
+
+
 
 const formItemLayout = {
   labelCol: {
@@ -61,7 +65,7 @@ const FormProfile = ({
 }) => {
   function handleSubmit(e) {
     e.preventDefault();
-    validateFields((errors) => {
+    validateFields((errors, fieldValue) => {
       if (errors) {
         toggleAlertError(true);
         return;
@@ -71,11 +75,35 @@ const FormProfile = ({
         ...getFieldsValue(),
         logoPhoto: getUrlFromFileList(getFieldValue('logoPhoto')),
         coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
+        workingTime: getWorkingTime(getFieldValue('workingTime')),
       };
-
+      console.log(Object.assign({},omit(getFieldsValue(),['starttime','endtime']),{
+        logoPhoto: getUrlFromFileList(getFieldValue('logoPhoto')),
+        coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
+        workingTime: getWorkingTime(getFieldValue('workingTime')),
+      }));
       console.log('OK:payload', payload);
       updateData(payload);
     });
+  }
+
+  function getStartEndTime() {
+    return {
+      start: getFieldValue('starttime').format('HH:mm'),
+      end: getFieldValue('endtime').format('HH:mm'),
+    }
+  }
+
+  function getWorkingTime(days) {
+    const workingTime = {};
+
+    var ocs = days.map(day => {
+      workingTime[day] = getStartEndTime();
+      return {
+        [day]: getStartEndTime(),
+      };
+    });
+    return workingTime;
   }
 
   const mapProps = {
@@ -226,17 +254,32 @@ const FormProfile = ({
           <FormItem {...formItemLayout}>
             <h3>Local</h3>
           </FormItem>
-          <FormMap mapInfo={mapProps} />
+          <FormItem>
+            {
+              getFieldDecorator('searchMap', {
+                valuePropName: 'searchMap',
+              })(<FormMap mapInfo={mapProps} />)
+            }
+          </FormItem>
+          <FormItem {...formItemLayout}>
+            <h3>Horario de Atención</h3>
+          </FormItem>
           <FormItem
-            label="Horario de atención"
-            {...formItemLayout}
+            label="horario de atencion"
+            labelCol={{
+              xs: { span: 25 },
+              sm: { span: 6 },
+            }}
+            wrapperCol={{
+              xs: { span: 24 },
+              sm: { span: 18 },
+            }}
           >
-            <Col span="6">
+            <Col span="6" >
               <FormItem >
                 {
                   getFieldDecorator('starttime', {
                     initialValue: moment('00:00', 'HH:mm'), //TODO: put the prop starTime
-                    getValueFromEvent: (a, b) => {console.log('a',a);console.log('b',b);},
                     rules: [
                       {
                         required: true,
@@ -266,100 +309,41 @@ const FormProfile = ({
               </FormItem>
             </Col>
           </FormItem>
-          {/*
-          <FormItem {...formItemLayout} label="Horario de atención">
-            {
-              getFieldDecorator('starttime', {
-                initialValue: '',
-                rules: [
-                  {
-                    required: true,
-                    message: 'ocs starttime',
-                  },
-                ],
-              })(
-                <InputGroup>
-                  <Col span={4}>
-                    <Input />
-                  </Col>
-                  <Col span={1}>
-                    {'a'}
-                  </Col>
-                  <Col span={4}>
-                    <Input />
-                  </Col>
-                </InputGroup>,
-                )
-            }
+          <FormItem
+            label="Dias de atención"
+            labelCol={{
+              xs: { span: 24 },
+              sm: { span: 6 },
+            }}
+            wrapperCol={{
+              xs: { span: 24 },
+              sm: { span: 18 },
+            }}
+          >
+            <Row>
+              <Col span={14}>
+                {
+                  getFieldDecorator('workingTime', {
+                    initialValue: null,
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Por favor, elija un dia',
+                      },
+                    ]
+                  })(<CheckboxGroup options={[
+                    {label: 'LU', value: 'MO' },
+                    {label: 'MA', value: 'TU' },
+                    {label: 'MI', value: 'WE' },
+                    {label: 'JU', value: 'TH' },
+                    {label: 'VI', value: 'FR' },
+                    {label: 'SA', value: 'SA' },
+                    {label: 'DO', value: 'SU' },
+                  ]} />)
+                }
+              </Col>
+            </Row>
           </FormItem>
-          <Row gutter={8}>
-            <Col span={3}>asd</Col>
-            <Col span={12}>
-              <Row gutter={4} justify="start">
-                <Col span={10}>
-                  <FormItem {...formItemLayout} label="Horario de atención">
-                    {
-                      getFieldDecorator('starttime', {
-                        initialValue: '',
-                        rules: [
-                          {
-                            required: true,
-                            message: 'ocs starttime',
-                          },
-                        ],
-                      })(
-                        <InputGroup>
-                          <Col span={4}>
-                            asd
-                          </Col>
-                          <Col span={8}>
-                            asd
-                          </Col>
-                        </InputGroup>,
-                      )
-                    }
-                  </FormItem>
-                </Col>
-                <Col span={2}>a</Col>
-                <Col span={10}>
-                  <FormItem {...formItemLayout} colon={false}>
-                    {
-                      getFieldDecorator('endtime', {
-                        initialValue: '',
-                        rules: [
-                          {
-                            required: true,
-                            message: 'ocs starttime',
-                          },
-                        ],
-                      })(<Input />)
-                    }
-                  </FormItem>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={8}>asd</Col>
-          </Row>
-            <FormItem {...formItemLayout} label="Dirección">
-              {
-                getFieldDecorator('address', {
-                  initialValue: data.address,
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: 'Por favor, ingrese la dirección del negocio',
-                    },
-                    {
-                      max: 200,
-                      message: 'La dirección no puede ser de más de 200 caracteres',
-                    },
-                  ],
-                })(<Input />)
-              }
-            </FormItem>
-          */}
-
           <FormItem {...formItemLayout}>
             <h3>Parámetros de delivery</h3>
           </FormItem>
@@ -401,6 +385,26 @@ const FormProfile = ({
                   },
                 ],
               })(<InputNumber min={0} max={50} />)
+            }
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={(
+              <span>
+                Tiempo máximo&nbsp;<strong>(min)</strong>
+              </span>
+            )}
+          >
+            {
+              getFieldDecorator('deliveryTime', {
+                initialValue: data.deliveryTime,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Por favor, ingrese una cantidad',
+                  },
+                ],
+              })(<InputNumber min={0} max={90}></InputNumber>)
             }
           </FormItem>
           <FormItem {...formItemLayout}>

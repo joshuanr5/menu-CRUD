@@ -1,4 +1,5 @@
 import React from 'react';
+import omit from 'lodash/omit';
 import GoogleApiComponent from '../../lib/google/GoogleApiComponent';
 import Map from './Map';
 // import LocalList from '../components/LocalList';
@@ -17,7 +18,6 @@ class MapContainer extends React.Component {
         lat: currentLocation.lat || '-12.054432177698004',
         lng: currentLocation.lng || '-77.1039048501953',
       },
-      locals: [],
     };
 
     this.handleLatChange = this.handleLatChange.bind(this);
@@ -35,6 +35,9 @@ class MapContainer extends React.Component {
   setAddress(address) {
     this.setState({
       currentAddress: address,
+    }, () => {
+      const dataChange = omit(this.state, ['render']);
+      this.props.onChange(dataChange);
     });
   }
 

@@ -25,6 +25,12 @@ const Menus = () => {
           {'Local'}
         </Link>
       </Item>
+      <Item key="testing" >
+        <Link to="/testing" >
+          <Icon type="shop" />
+          {'testing'}
+        </Link>
+      </Item>
     </MenuAntd>
   );
 };
