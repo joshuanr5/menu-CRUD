@@ -77,7 +77,7 @@ const FormProfile = ({
         coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
         workingTime: getWorkingTime(getFieldValue('workingTime')),
       };
-      console.log(Object.assign({},omit(getFieldsValue(),['starttime','endtime']),{
+      console.log(Object.assign({}, omit(getFieldsValue(), ['starttime', 'endtime']), {
         logoPhoto: getUrlFromFileList(getFieldValue('logoPhoto')),
         coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
         workingTime: getWorkingTime(getFieldValue('workingTime')),
@@ -257,6 +257,13 @@ const FormProfile = ({
           <FormItem>
             {
               getFieldDecorator('searchMap', {
+                initialValue: {
+                  currentAddress: 'asdasd',
+                  currentLocation: {
+                    lat: '12',
+                    lng: '10',
+                  },
+                },
                 valuePropName: 'searchMap',
               })(<FormMap mapInfo={mapProps} />)
             }
@@ -331,15 +338,17 @@ const FormProfile = ({
                         message: 'Por favor, elija un dia',
                       },
                     ]
-                  })(<CheckboxGroup options={[
-                    {label: 'LU', value: 'MO' },
-                    {label: 'MA', value: 'TU' },
-                    {label: 'MI', value: 'WE' },
-                    {label: 'JU', value: 'TH' },
-                    {label: 'VI', value: 'FR' },
-                    {label: 'SA', value: 'SA' },
-                    {label: 'DO', value: 'SU' },
-                  ]} />)
+                  })(<CheckboxGroup
+                    options={[
+                      { label: 'LU', value: 'MO' },
+                      { label: 'MA', value: 'TU' },
+                      { label: 'MI', value: 'WE' },
+                      { label: 'JU', value: 'TH' },
+                      { label: 'VI', value: 'FR' },
+                      { label: 'SA', value: 'SA' },
+                      { label: 'DO', value: 'SU' },
+                    ]}
+                  />)
                 }
               </Col>
             </Row>

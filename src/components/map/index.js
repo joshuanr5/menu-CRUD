@@ -32,6 +32,19 @@ class MapContainer extends React.Component {
     this.setLocation = this.setLocation.bind(this);
   }
 
+  componentWillMount() {
+    const initialValueProps = this.props['data-__meta'].initialValue;
+    let initialValue = omit(this.state, ['render']);
+
+    if (initialValueProps) {
+      initialValue = initialValueProps;
+      this.setState({
+        ...initialValueProps,
+      });
+    }
+    this.props.onChange(initialValue);
+  }
+
   setAddress(address) {
     this.setState({
       currentAddress: address,
@@ -111,7 +124,6 @@ class MapContainer extends React.Component {
   handleSave() {
     const { lat, lng } = this.state.currentLocation;
     const address = this.state.currentAddress;
-    const id = this.state.locals.length + 1;
 
     if (address === '') return;
 
