@@ -4,7 +4,7 @@ import { Router } from 'dva/router';
 import App from './routes/App';
 import Menu from './routes/menu';
 import Local from './routes/business';
-import Testing from './routes/testing';
+import TimePicker from './components/time_picker';
 
 const cached = {};
 function registerModel(app, model) {
@@ -29,8 +29,8 @@ export default ({ history }) => {
         },
         {
           path: 'testing',
-          component: Testing,
-        }
+          component: TimePicker,
+        },
       ],
     },
   ];

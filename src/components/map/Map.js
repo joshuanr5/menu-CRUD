@@ -40,7 +40,7 @@ class Map extends React.Component {
 
   componentDidMount() {
     this.loadMap();
-    this.loadSearchBox();
+    this.loadSearchBox(this.props.currentAddress);
     this.loadMarker();
     this.loadCircle();
   }
@@ -138,12 +138,12 @@ class Map extends React.Component {
       map: this.map,
       radius: 100,
       fillCOlor: '#FF0000',
-      fillOpacity: 0.2,
+      fillOpacity: 0.15,
     });
     this.circle.setCenter(this.map.getCenter());
   }
 
-  loadSearchBox() {
+  loadSearchBox(initialAddress) {
     if (this.searchBox) return;
 
     const { google } = this.props;
@@ -153,6 +153,7 @@ class Map extends React.Component {
     this.searchBox.bindTo('bounds', this.map);
 
     this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(searchBoxNode);
+    this.refs.autocomplete.value = initialAddress;
 
     google.maps.event.addListener(this.searchBox, 'places_changed', () => {
       if (this.timer) {

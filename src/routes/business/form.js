@@ -1,15 +1,12 @@
 import React from 'react';
 import { Form, Input, InputNumber, Icon, Select, Button, Upload, Modal, Alert, Spin, Switch, Col, Row, TimePicker, Checkbox } from 'antd';
 import moment from 'moment';
+import omit from 'lodash/omit';
 import FormMap from '../../components/map';
 import UploadButton from '../../components/common/upload-button';
 import { getInitialFileList, getUrlFromFileList } from '../../lib/helpers';
-import omit from 'lodash/omit';
 
-const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
-
-
 
 const formItemLayout = {
   labelCol: {
@@ -304,7 +301,7 @@ const FormProfile = ({
               <FormItem>
                 {
                   getFieldDecorator('endtime', {
-                    initialValue: moment('23:00', 'HH:mm'), // TODO: put the prop endTime
+                    //initialValue: moment('23:00', 'HH:mm'), // TODO: put the prop endTime
                     rules: [
                       {
                         required: true,

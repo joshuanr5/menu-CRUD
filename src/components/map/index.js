@@ -25,7 +25,7 @@ class MapContainer extends React.Component {
     this.handleFind = this.handleFind.bind(this);
     this.handleDragend = this.handleDragend.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+    // this.handleSave = this.handleSave.bind(this);
     this.setAddress = this.setAddress.bind(this);
     this.handleShowClick = this.handleShowClick.bind(this);
     this.changeRender = this.changeRender.bind(this);
@@ -41,6 +41,9 @@ class MapContainer extends React.Component {
       this.setState({
         ...initialValueProps,
       });
+      const { currentAddress } = initialValueProps;
+      console.log('asd', currentAddress)
+      this.setAddress(currentAddress);
     }
     this.props.onChange(initialValue);
   }
@@ -121,25 +124,11 @@ class MapContainer extends React.Component {
   }
 
 
-  handleSave() {
-    const { lat, lng } = this.state.currentLocation;
-    const address = this.state.currentAddress;
-
-    if (address === '') return;
-
-    // const local = {
-    //   address,
-    //   location: {
-    //     lat,
-    //     lng,
-    //   },
-    // };
-
-    // this.props.dispatch({ type: 'mapInfo/saveLocal', payload: local });
-    this.setState({
-      locals: [...this.state.locals, { id, address, lat, lng }],
-    });
-  }
+// handleSave() {
+//   const { lat, lng } = this.state.currentLocation;
+//   const address = this.state.currentAddress;
+//   if (address === '') return;
+// }
 
   handleShowClick(local) {
     const { address, lat, lng } = local;
@@ -174,6 +163,7 @@ class MapContainer extends React.Component {
             getLocation={this.setLocation}
             setAddress={this.setAddress}
             changeRender={this.changeRender}
+            currentAddress={this.state.currentAddress}
           />
         }
         {/*
@@ -196,8 +186,8 @@ class MapContainer extends React.Component {
           />
           <hr />
           <LocalList locals={this.state.locals} onShowClick={this.handleShowClick} />
+          <button style={{ marginLeft: '53em' }} >Saves local</button>
         */}
-        <button style={{ marginLeft: '53em' }} onClick={this.handleSave}>Saves local</button>
       </div>
     );
   }

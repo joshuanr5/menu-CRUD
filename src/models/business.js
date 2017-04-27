@@ -18,9 +18,20 @@ export default {
     facebookPage: null,
     logoPhoto: 'http://unsplash.it/341',
     coverPhoto: 'http://unsplash.it/342',
-    address: 'Av. Aviacion 206',
+    address: 'Jr. Alfonso Ugarte 115, La Merced, Comas',
+    coordinates: {
+      lat: 12.232323,
+      lng: -10.1231231,
+    },
+    workingTime: {
+      MO: {
+        start: '12:00',
+        end: '22:00',
+      },
+    },
     minOrderValue: 2,
     deliveryValue: 0,
+    deliveryTime: 25,
     switchCash: false,
     switchVisa: false,
     switchMastercard: false,
