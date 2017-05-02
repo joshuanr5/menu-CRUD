@@ -9,7 +9,8 @@ const { Content } = LayoutAntd;
 
 const App = ({ children, location, login, dispatch }) => {
   return (
-    !login.login ?
+    // !login.login ?
+      false ?
       (
         <Login login={login} />
       ) : (
