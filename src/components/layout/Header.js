@@ -9,11 +9,12 @@ const Item = Menu.Item;
 
 const Header = ({
   dispatch,
+  username,
 }) => {
   const titleSubMenu = (
     <span>
       <Icon type="user" />
-      {'Joshua Navarro'}
+      {username}
     </span>
   );
   function handleMenuClick(e) {
@@ -22,6 +23,7 @@ const Header = ({
         type: 'login/changeLogin',
         payload: {
           login: false,
+          username: '',
         },
       });
     }
@@ -32,7 +34,7 @@ const Header = ({
       <Menu theme="dark" mode="horizontal" className={styles.headermenu} onClick={handleMenuClick}>
         <SubMenu className={styles.submenu} title={titleSubMenu} >
           <Item key="account" >Perfil</Item>
-          <Item key="logout" onTitleClick={() => { console.log('click logout'); }}>Salir</Item>
+          <Item key="logout" >Salir</Item>
         </SubMenu>
       </Menu>
     </HeaderAntd>

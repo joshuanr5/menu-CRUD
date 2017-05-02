@@ -1,16 +1,55 @@
+import axios from 'axios';
+
 export default {
   namespace: 'login',
   state: {
     login: false,
+    username: '',
+    loginLoaded: false,
   },
   effects: {
+    *login({ payload }, { call, put }) {
+      console.log('changeload');
+      yield put({
+        type: 'changeLoad',
+        payload: {
+          loginLoaded: true,
+        },
+      });
+      const response = yield call(() => {
+        // TODO: fix problems with the backend
+        return axios.post('http://localhost:4000/login', {
+          ...payload,
+        });
+      });
+      const { login, username } = response.data.data;
+      console.log('changeload');
+      yield put({
+        type: 'changeLoad',
+        payload: {
+          loginLoaded: false,
+        },
+      });
+      yield put({
+        type: 'changeLogin',
+        payload: {
+          login,
+          username,
+        },
+      });
+    },
   },
   reducers: {
-    changeLogin(state, { payload }) {
-      const { login } = payload;
+    changeLoad(state, { payload }) {
       return {
         ...state,
-        login,
+        ...payload,
+      };
+    },
+    changeLogin(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
       };
     },
   },

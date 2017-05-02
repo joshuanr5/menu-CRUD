@@ -16,10 +16,11 @@ const LoginTab = ({
       if (!err) {
         // aqui hacer la consulta y que me retorne true o false
         // guardar la respuesta en localStore
-        console.log('submit ->', values);
-        setTimeout(() => {
-          onSubmit();
-        }, 300);
+        // console.log('submit ->', values);
+        // setTimeout(() => {
+        //   onSubmit();
+        // }, 300);
+        onSubmit(values);
       }
     });
   }
@@ -28,7 +29,7 @@ const LoginTab = ({
     <Form style={{ paddingTop: '20px' }} onSubmit={handleSubmit}>
       <FormItem hasFeedback>
         {
-          getFieldDecorator('username', {
+          getFieldDecorator('email', {
             rules: [
               {
                 required: true,

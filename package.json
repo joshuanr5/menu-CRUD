@@ -18,10 +18,12 @@
   },
   "dependencies": {
     "antd": "^2.9.1",
+    "axios": "^0.16.1",
     "classnames": "^2.2.5",
     "currency-formatter": "^1.2.1",
     "debug": "^2.6.3",
     "dva": "^1.2.1",
+    "dva-loading": "^0.2.1",
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
