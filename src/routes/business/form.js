@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Input, InputNumber, Icon, Select, Button, Upload, Modal, Alert, Spin, Switch, Col, Row, TimePicker, Checkbox } from 'antd';
+import { Form, Input, InputNumber, Icon, Select, Button, Upload, Modal, Alert, Spin, Switch, Col, Row, Checkbox } from 'antd';
 import moment from 'moment';
 import omit from 'lodash/omit';
 import FormMap from '../../components/map';
+import TimePicker from '../../components/time_picker';
 import UploadButton from '../../components/common/upload-button';
 import { getInitialFileList, getUrlFromFileList } from '../../lib/helpers';
 
@@ -62,39 +63,49 @@ const FormProfile = ({
 }) => {
   function handleSubmit(e) {
     e.preventDefault();
-    validateFields((errors, fieldValue) => {
+    validateFields((errors, fieldsValue) => {
       if (errors) {
         toggleAlertError(true);
         return;
       }
 
+      console.log(getFieldValue('workingTime'))
       const payload = { // TODO: make working on aws image upload
         ...getFieldsValue(),
         logoPhoto: getUrlFromFileList(getFieldValue('logoPhoto')),
         coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
-        workingTime: getWorkingTime(getFieldValue('workingTime')),
+        workingTime: getWorkingTime(getFieldValue('workingDays')),
       };
-      console.log(Object.assign({}, omit(getFieldsValue(), ['starttime', 'endtime']), {
+      console.log(Object.assign({}, omit(getFieldsValue(), ['starttime', 'endtime', 'workingDays']), {
         logoPhoto: getUrlFromFileList(getFieldValue('logoPhoto')),
         coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
-        workingTime: getWorkingTime(getFieldValue('workingTime')),
+        workingTime: getWorkingTime(getFieldValue('workingDays')),
       }));
       console.log('OK:payload', payload);
       updateData(payload);
     });
   }
 
+  function checkTime(rule, value, cb) {
+    const { start, end } = getFieldValue('workingTime');
+    if (start === '' || end === '') {
+      cb('Por favor, seleccione todos los campos');
+    } else if (start >= end) {
+      cb('startTime tiene que ser menor que endTime');
+    } else {
+      cb();
+    }
+  }
   function getStartEndTime() {
     return {
-      start: getFieldValue('starttime').format('HH:mm'),
-      end: getFieldValue('endtime').format('HH:mm'),
-    }
+      ...getFieldValue('workingTime'),
+    };
   }
 
   function getWorkingTime(days) {
     const workingTime = {};
 
-    var ocs = days.map(day => {
+    days.map((day) => {
       workingTime[day] = getStartEndTime();
       return {
         [day]: getStartEndTime(),
@@ -268,50 +279,22 @@ const FormProfile = ({
           <FormItem {...formItemLayout}>
             <h3>Horario de Atención</h3>
           </FormItem>
-          <FormItem
-            label="horario de atencion"
-            labelCol={{
-              xs: { span: 25 },
-              sm: { span: 6 },
-            }}
-            wrapperCol={{
-              xs: { span: 24 },
-              sm: { span: 18 },
-            }}
-          >
-            <Col span="6" >
-              <FormItem >
-                {
-                  getFieldDecorator('starttime', {
-                    initialValue: moment('00:00', 'HH:mm'), //TODO: put the prop starTime
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Por favor, poner starTime', //TODO: changes the message
-                      },
-                    ],
-                  })(<TimePicker placeholder="start time" format="HH:mm" />)
-                }
-              </FormItem>
-            </Col>
-            <Col span="1">
-              <p className="ant-form-split">a</p>
-            </Col>
-            <Col span="6">
-              <FormItem>
-                {
-                  getFieldDecorator('endtime', {
-                    //initialValue: moment('23:00', 'HH:mm'), // TODO: put the prop endTime
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Por favor, poner endTime', // TODO: changes the message
-                      },
-                    ],
-                  })(<TimePicker placeholder="end time" format="HH:mm" />)
-                }
-              </FormItem>
-            </Col>
+          <FormItem label="Horario de atención" {...formItemLayout}>
+            {
+              getFieldDecorator('workingTime', {
+                initialValue: {
+                  start: '08:00',
+                  end: '22:00',
+                },
+                rules: [{
+                  validator: checkTime,
+                }, {
+                  required: true,
+                  message: 'hola',
+                },
+                ],
+              })(<TimePicker />)
+            }
           </FormItem>
           <FormItem
             label="Dias de atención"
@@ -327,7 +310,7 @@ const FormProfile = ({
             <Row>
               <Col span={14}>
                 {
-                  getFieldDecorator('workingTime', {
+                  getFieldDecorator('workingDays', {
                     initialValue: null,
                     rules: [
                       {

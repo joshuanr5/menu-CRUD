@@ -96,56 +96,58 @@ class TimePicker extends React.Component {
   }
 }
 
-const Testing = ({
-  form: {
-    getFieldDecorator,
-    getFieldValue,
-    validateFieldsAndScroll,
-  },
-}) => {
-  function checkSubmit(e) {
-    e.preventDefault();
-    validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('onSubmit ->', values);
-      }
-    });
-  }
-  function checkTime(rule, value, cb) {
-    const { start, end } = getFieldValue('workingTime');
-    if (start === '' || end === '') {
-      cb('Por favor, seleccione todos los campos');
-    } else if (start >= end) {
-      cb('startTime tiene que ser menor que endTime');
-    } else {
-      cb();
-    }
-  }
-  return (
-    <Form onSubmit={checkSubmit}>
-      <Form.Item>
-        {
-          getFieldDecorator('workingTime', {
-            initialValue: {
-              start: '08:00',
-              end: '22:00',
-            },
-            rules: [{
-              validator: checkTime,
-            }, {
-              required: true,
-              message: 'hola',
-            },
-            ],
-          })(<TimePicker />)
-        }
-      </Form.Item>
-      <Form.Item>
-        <Button htmlType="submit">Submit</Button>
-      </Form.Item>
-    </Form>
-  );
-};
+export default TimePicker;
 
-export default Form.create()(Testing);
+// const Testing = ({
+//   form: {
+//     getFieldDecorator,
+//     getFieldValue,
+//     validateFieldsAndScroll,
+//   },
+// }) => {
+//   function checkSubmit(e) {
+//     e.preventDefault();
+//     validateFieldsAndScroll((err, values) => {
+//       if (!err) {
+//         console.log('onSubmit ->', values);
+//       }
+//     });
+//   }
+//   function checkTime(rule, value, cb) {
+//     const { start, end } = getFieldValue('workingTime');
+//     if (start === '' || end === '') {
+//       cb('Por favor, seleccione todos los campos');
+//     } else if (start >= end) {
+//       cb('startTime tiene que ser menor que endTime');
+//     } else {
+//       cb();
+//     }
+//   }
+//   return (
+//     <Form onSubmit={checkSubmit}>
+//       <Form.Item>
+//         {
+          // getFieldDecorator('workingTime', {
+          //   initialValue: {
+          //     start: '08:00',
+          //     end: '22:00',
+          //   },
+          //   rules: [{
+          //     validator: checkTime,
+          //   }, {
+          //     required: true,
+          //     message: 'hola',
+          //   },
+          //   ],
+          // })(<TimePicker />)
+//         }
+//       </Form.Item>
+//       <Form.Item>
+//         <Button htmlType="submit">Submit</Button>
+//       </Form.Item>
+//     </Form>
+//   );
+// };
+
+// export default Form.create()(Testing);
 
