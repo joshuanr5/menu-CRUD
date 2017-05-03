@@ -20,11 +20,15 @@ export default {
     coverPhoto: 'http://unsplash.it/342',
     address: 'Jr. Alfonso Ugarte 115, La Merced, Comas',
     coordinates: {
-      lat: 12.232323,
-      lng: -10.1231231,
+      lat: -11.970391307222803,
+      lng: -77.05669935158994,
     },
     workingTime: {
       MO: {
+        start: '12:00',
+        end: '22:00',
+      },
+      SA: {
         start: '12:00',
         end: '22:00',
       },

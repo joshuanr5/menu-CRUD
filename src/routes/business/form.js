@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Input, InputNumber, Icon, Select, Button, Upload, Modal, Alert, Spin, Switch, Col, Row, Checkbox } from 'antd';
-import moment from 'moment';
 import omit from 'lodash/omit';
 import FormMap from '../../components/map';
 import TimePicker from '../../components/time_picker';
@@ -68,21 +67,18 @@ const FormProfile = ({
         toggleAlertError(true);
         return;
       }
-
-      console.log(getFieldValue('workingTime'))
-      const payload = { // TODO: make working on aws image upload
-        ...getFieldsValue(),
+      getDaysFromProps();
+      console.log('data ->', data);
+      const { currentAddress, currentLocation } = getFieldValue('searchMap');
+      const payload = Object.assign({}, omit(getFieldsValue(), ['starttime', 'endtime', 'workingDays', 'searchMap']), {
         logoPhoto: getUrlFromFileList(getFieldValue('logoPhoto')),
         coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
         workingTime: getWorkingTime(getFieldValue('workingDays')),
-      };
-      console.log(Object.assign({}, omit(getFieldsValue(), ['starttime', 'endtime', 'workingDays']), {
-        logoPhoto: getUrlFromFileList(getFieldValue('logoPhoto')),
-        coverPhoto: getUrlFromFileList(getFieldValue('coverPhoto')),
-        workingTime: getWorkingTime(getFieldValue('workingDays')),
-      }));
+        address: currentAddress,
+        coordinates: currentLocation,
+      });
       console.log('OK:payload', payload);
-      updateData(payload);
+      // updateData(payload);
     });
   }
 
@@ -101,7 +97,6 @@ const FormProfile = ({
       ...getFieldValue('workingTime'),
     };
   }
-
   function getWorkingTime(days) {
     const workingTime = {};
 
@@ -113,6 +108,21 @@ const FormProfile = ({
     });
     return workingTime;
   }
+  function getTimeFromProps() {
+    const days = data.workingTime;
+    for (const key in days) {
+      return days[key];
+    }
+  }
+  function getDaysFromProps() {
+    const { workingTime } = data;
+    const days = [];
+    for (const key in workingTime) {
+      days.push(key);
+    }
+    return days;
+  }
+
 
   const mapProps = {
     currentAddress: '',
@@ -121,7 +131,7 @@ const FormProfile = ({
       lng: '',
     },
   };
-
+  console.log('render Form with data -> ', data);
   return (
     <div>
       {
@@ -266,11 +276,8 @@ const FormProfile = ({
             {
               getFieldDecorator('searchMap', {
                 initialValue: {
-                  currentAddress: 'asdasd',
-                  currentLocation: {
-                    lat: '12',
-                    lng: '10',
-                  },
+                  currentAddress: data.address,
+                  currentLocation: data.coordinates,
                 },
                 valuePropName: 'searchMap',
               })(<FormMap mapInfo={mapProps} />)
@@ -281,19 +288,12 @@ const FormProfile = ({
           </FormItem>
           <FormItem label="Horario de atención" {...formItemLayout}>
             {
-              getFieldDecorator('workingTime', {
-                initialValue: {
-                  start: '08:00',
-                  end: '22:00',
-                },
-                rules: [{
-                  validator: checkTime,
-                }, {
-                  required: true,
-                  message: 'hola',
-                },
-                ],
-              })(<TimePicker />)
+                getFieldDecorator('workingTime', {
+                  initialValue: getTimeFromProps(),
+                  rules: [{
+                    validator: checkTime,
+                  }],
+                })(<TimePicker />)
             }
           </FormItem>
           <FormItem
@@ -311,13 +311,13 @@ const FormProfile = ({
               <Col span={14}>
                 {
                   getFieldDecorator('workingDays', {
-                    initialValue: null,
+                    initialValue: getDaysFromProps(),
                     rules: [
                       {
                         required: true,
                         message: 'Por favor, elija un dia',
                       },
-                    ]
+                    ],
                   })(<CheckboxGroup
                     options={[
                       { label: 'LU', value: 'MO' },
@@ -393,7 +393,7 @@ const FormProfile = ({
                     message: 'Por favor, ingrese una cantidad',
                   },
                 ],
-              })(<InputNumber min={0} max={90}></InputNumber>)
+              })(<InputNumber min={0} max={90} />)
             }
           </FormItem>
           <FormItem {...formItemLayout}>

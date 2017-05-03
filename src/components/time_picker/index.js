@@ -14,7 +14,6 @@ class TimePicker extends React.Component {
     },
   };
   componentWillMount() {
-    console.log(this.props);
     const { onChange } = this.props;
     const initialValueProps = this.props['data-__meta'].initialValue;
     let initialValue = this.state.workingTime;
@@ -25,7 +24,7 @@ class TimePicker extends React.Component {
         workingTime: initialValueProps,
       });
     }
-    onChange(initialValue);
+    onChange(initialValue);  // Al usar el onChange activa el boton submit
   }
 
   handleChange = (type, e) => {
@@ -68,7 +67,7 @@ class TimePicker extends React.Component {
     const { start, end } = this.state.workingTime;
     return (
       <Row >
-        <Col span={4} >
+        <Col span={5} >
           <TimePickerAntd
             defaultValue={moment(start, 'HH:mm')}
             disabledMinutes={this.disabledMinutes}
@@ -81,7 +80,7 @@ class TimePicker extends React.Component {
         <Col span={1} >
           <p className="ant-form-split">a</p>
         </Col>
-        <Col span={4} >
+        <Col span={5} >
           <TimePickerAntd
             defaultValue={moment(end, 'HH:mm')}
             disabledMinutes={this.disabledMinutes}

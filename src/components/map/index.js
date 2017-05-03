@@ -4,6 +4,8 @@ import GoogleApiComponent from '../../lib/google/GoogleApiComponent';
 import Map from './Map';
 // import LocalList from '../components/LocalList';
 
+let GOOGLE = null;
+
 const __GAPI_KEY__ = 'AIzaSyDyeDEjXziWUwb6po-q1vy47vsw2QjYiQI';
 
 class MapContainer extends React.Component {
@@ -42,7 +44,6 @@ class MapContainer extends React.Component {
         ...initialValueProps,
       });
       const { currentAddress } = initialValueProps;
-      console.log('asd', currentAddress)
       this.setAddress(currentAddress);
     }
     this.props.onChange(initialValue);
@@ -124,11 +125,11 @@ class MapContainer extends React.Component {
   }
 
 
-// handleSave() {
-//   const { lat, lng } = this.state.currentLocation;
-//   const address = this.state.currentAddress;
-//   if (address === '') return;
-// }
+  // handleSave() {
+  //   const { lat, lng } = this.state.currentLocation;
+  //   const address = this.state.currentAddress;
+  //   if (address === '') return;
+  // }
 
   handleShowClick(local) {
     const { address, lat, lng } = local;
@@ -151,6 +152,11 @@ class MapContainer extends React.Component {
 
   render() {
     const { currentLocation } = this.state;
+    if (this.props.google) {
+      GOOGLE = this.props.google;
+      console.log('gola', GOOGLE);
+    }
+    const gg = this.props.google || GOOGLE;
     return (
       <div>
         {!this.props.loaded && 'loagind...'/* TODO: replace for a spin*/}
@@ -192,6 +198,10 @@ class MapContainer extends React.Component {
     );
   }
 }
+
+MapContainer.defaultProps = {
+  google: GOOGLE,
+};
 
 export default GoogleApiComponent({
   apiKey: __GAPI_KEY__,
