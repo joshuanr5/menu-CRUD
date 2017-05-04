@@ -90,6 +90,9 @@ import ReactDOM from 'react-dom'
 import cache from './ScriptCache'
 import GoogleApi from './GoogleApi'
 
+let mapsCache;
+let googleCache;
+
 const defaultMapConfig = {}
 export const wrapper = (options) => (WrappedComponent) => {
   const apiKey = options.apiKey;
@@ -109,7 +112,11 @@ export const wrapper = (options) => (WrappedComponent) => {
     componentDidMount() {
       const refs = this.refs;
       this.scriptCache.google.onLoad((err, tag) => {
-        const maps = window.google.maps;
+        if (window.google && window.google.maps) {
+          mapsCache = window.google.maps;
+          googleCache = window.google;
+        }
+        const maps = mapsCache;
         const props = Object.assign({}, this.props, {
           loaded: this.state.loaded
         });
@@ -128,7 +135,7 @@ export const wrapper = (options) => (WrappedComponent) => {
         this.setState({
           loaded: true,
           map: this.map,
-          google: window.google
+          google: googleCache,
         })
       });
     }

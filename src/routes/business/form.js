@@ -280,7 +280,7 @@ const FormProfile = ({
                   currentLocation: data.coordinates,
                 },
                 valuePropName: 'searchMap',
-              })(<FormMap mapInfo={mapProps} />)
+              })(<FormMap />)
             }
           </FormItem>
           <FormItem {...formItemLayout}>

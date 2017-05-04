@@ -1,24 +1,21 @@
 import React from 'react';
 import omit from 'lodash/omit';
+import { Spin } from 'antd';
 import GoogleApiComponent from '../../lib/google/GoogleApiComponent';
 import Map from './Map';
 // import LocalList from '../components/LocalList';
-
-let GOOGLE = null;
 
 const __GAPI_KEY__ = 'AIzaSyDyeDEjXziWUwb6po-q1vy47vsw2QjYiQI';
 
 class MapContainer extends React.Component {
   constructor(props) {
     super(props);
-    const { currentAddress } = props.mapInfo;
-    const { currentLocation } = props.mapInfo;
     this.state = {
       render: false,
-      currentAddress,
+      currentAddress: '',
       currentLocation: {
-        lat: currentLocation.lat || '-12.054432177698004',
-        lng: currentLocation.lng || '-77.1039048501953',
+        lat: '',
+        lng: '',
       },
     };
 
@@ -124,13 +121,6 @@ class MapContainer extends React.Component {
     });
   }
 
-
-  // handleSave() {
-  //   const { lat, lng } = this.state.currentLocation;
-  //   const address = this.state.currentAddress;
-  //   if (address === '') return;
-  // }
-
   handleShowClick(local) {
     const { address, lat, lng } = local;
 
@@ -151,12 +141,6 @@ class MapContainer extends React.Component {
   }
 
   render() {
-    const { currentLocation } = this.state;
-    if (this.props.google) {
-      GOOGLE = this.props.google;
-      console.log('gola', GOOGLE);
-    }
-    const gg = this.props.google || GOOGLE;
     return (
       <div>
         {!this.props.loaded && 'loagind...'/* TODO: replace for a spin*/}
@@ -172,36 +156,14 @@ class MapContainer extends React.Component {
             currentAddress={this.state.currentAddress}
           />
         }
-        {/*
-          <hr />
-          <span>lat: </span>
-          <input
-            className="lat"
-            type="text"
-            value={currentLocation.lat}
-            onChange={this.handleLatChange}
-            onBlur={this.handleBlur}
-          />
-          <span style={{ marginLeft: '2em' }}>lng: </span>
-          <input
-            className="lng"
-            type="text"
-            value={currentLocation.lng}
-            onChange={this.handleLngChange}
-            onBlur={this.handleBlur}
-          />
-          <hr />
-          <LocalList locals={this.state.locals} onShowClick={this.handleShowClick} />
-          <button style={{ marginLeft: '53em' }} >Saves local</button>
-        */}
       </div>
     );
   }
 }
 
-MapContainer.defaultProps = {
-  google: GOOGLE,
-};
+// MapContainer.defaultProps = {
+//   google: GOOGLE,
+// };
 
 export default GoogleApiComponent({
   apiKey: __GAPI_KEY__,
