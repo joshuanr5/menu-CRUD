@@ -4,6 +4,8 @@ import { Layout as LayoutAntd, Spin } from 'antd';
 import { Layout } from '../components';
 import Login from './pre-home';
 
+import '../components/skin.less';
+
 const { Header, Footer, Sider, styles } = Layout;
 const { Content } = LayoutAntd;
 

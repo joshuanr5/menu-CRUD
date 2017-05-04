@@ -112,7 +112,7 @@ class Map extends React.Component {
     this.marker = new google.maps.Marker({
       map: this.map,
       draggable: true,
-      icon: 'http://maps.google.com/mapfiles/kml/paddle/stop.png',
+      icon: 'http://i.imgur.com/QZ81aYS.png',
     });
 
     this.marker.setPosition(this.map.getCenter());
@@ -165,7 +165,7 @@ class Map extends React.Component {
       if (!place) return;
 
       this.map.setCenter(place.geometry.location);
-      this.map.setZoom(19);
+      this.map.setZoom(18);
 
       this.circle.setCenter(place.geometry.location);
 

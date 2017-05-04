@@ -142,8 +142,7 @@ class MapContainer extends React.Component {
 
   render() {
     return (
-      <div>
-        {!this.props.loaded && 'loagind...'/* TODO: replace for a spin*/}
+      <Spin spinning={!this.props.loaded}>
         {this.props.loaded &&
           <Map
             google={this.props.google}
@@ -156,7 +155,7 @@ class MapContainer extends React.Component {
             currentAddress={this.state.currentAddress}
           />
         }
-      </div>
+      </Spin>
     );
   }
 }
