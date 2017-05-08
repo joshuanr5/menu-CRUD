@@ -6,6 +6,8 @@ import TimePicker from '../../components/time_picker';
 import UploadButton from '../../components/common/upload-button';
 import { getInitialFileList, getUrlFromFileList } from '../../lib/helpers';
 
+let con = 0;
+
 const CheckboxGroup = Checkbox.Group;
 
 const formItemLayout = {
@@ -48,15 +50,20 @@ function normFile(e) {
 }
 
 class FormProfile extends React.Component {
+  componentWillMount() {
+    con = 0;
 
+    if (this.props.data.saveButtonEnabled) {
+      this.props.enableSaveButton(false);
+      con = -1;
+    }
+  }
   componentWillUpdate() {
     const { alertErrorVisible } = this.props.data;
-    // console.log('alerte->', alertErrorVisible);
     if (alertErrorVisible) {
       const { toggleAlertError } = this.props;
       toggleAlertError(false);
     }
-    // console.log('props ->', this.props, 'nextProps ->', nextProps);
   }
 
   getStartEndTime = () => {
@@ -143,6 +150,7 @@ class FormProfile extends React.Component {
         getFieldValue,
       },
     } = this.props;
+    con += 1;
     return (
       <div>
         {
@@ -160,7 +168,7 @@ class FormProfile extends React.Component {
         }
         <br />
         <Spin spinning={data.loading} tip="Actualizando información">
-          <Form layout="horizontal" onSubmit={this.handleSubmit}>
+          <Form layout="horizontal">
             <FormItem {...formItemLayout}>
               <h3>Información Básica</h3>
             </FormItem>
@@ -316,6 +324,8 @@ class FormProfile extends React.Component {
                   initialValue: this.getTimeFromProps(),
                   rules: [{
                     validator: this.checkTime,
+                  }, {
+                    required: true,
                   }],
                 })(<TimePicker />)
               }
@@ -486,7 +496,7 @@ class FormProfile extends React.Component {
             <FormItem {...tailFormItemLayout}>
               <Button
                 type="primary"
-                htmlType="submit"
+                onClick={this.handleSubmit}
                 size="large"
                 loading={false}
                 disabled={!data.saveButtonEnabled}
@@ -507,10 +517,10 @@ class FormProfile extends React.Component {
     );
   }
 }
-
 export default Form.create({
   onValuesChange({ enableSaveButton }) {
-    enableSaveButton();
+    if (con < 2) return;
+    enableSaveButton(true);
   },
 })(FormProfile);
 

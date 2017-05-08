@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Row, Col } from 'antd';
 import './Map.less';
 
 const mapStyles = [
@@ -30,10 +31,7 @@ class Map extends React.Component {
     super(props);
     this.state = {
       inputStyle: {
-        margin: '10px',
-        padding: '5px',
-        width: '25em',
-        fontSize: 'large',
+        marginTop: '10px',
       },
     };
   }
@@ -55,7 +53,7 @@ class Map extends React.Component {
 
   componentWillUpdate(nextProps) {
     if (nextProps.mustRender) {
-      const { location, address } = nextProps.getLocation();
+      const { location, address } = nextProps.getLocation;
       const { lat, lng } = location;
       const center = new this.props.google.maps.LatLng(lat, lng);
 
@@ -91,8 +89,8 @@ class Map extends React.Component {
     const maps = google.maps;
     const mapRef = this.refs.map;
     const nodeMap = ReactDOM.findDOMNode(mapRef);
-    const zoom = this.map ? this.map.zoom : 12;
-    const { location } = this.props.getLocation();
+    const zoom = this.map ? this.map.zoom : 17;
+    const { location } = this.props.getLocation;
     const { lat, lng } = location;
     const center = new maps.LatLng(lat, lng);
     const mapConfig = {
@@ -112,7 +110,7 @@ class Map extends React.Component {
     this.marker = new google.maps.Marker({
       map: this.map,
       draggable: true,
-      icon: 'http://i.imgur.com/QZ81aYS.png',
+      icon: 'https://image.ibb.co/k0zYMQ/picker_FInished.png',
     });
 
     this.marker.setPosition(this.map.getCenter());
@@ -148,14 +146,13 @@ class Map extends React.Component {
 
     const { google } = this.props;
     const searchBoxNode = ReactDOM.findDOMNode(this.refs.autocomplete);
-
     this.searchBox = new google.maps.places.SearchBox(searchBoxNode);
     this.searchBox.bindTo('bounds', this.map);
 
-    this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(searchBoxNode);
+    // this.map.controls[google.maps.ControlPosition.LEFT_TOP].push(searchBoxNode);
     this.refs.autocomplete.value = initialAddress;
 
-    google.maps.event.addListener(this.searchBox, 'places_changed', () => {
+    google.maps.event.addListener(this.searchBox, 'places_changed', (e) => {
       if (this.timer) {
         clearTimeout(this.timer);
       }
@@ -215,13 +212,23 @@ class Map extends React.Component {
 
   render() {
     const mapStyle = {
-      width: '50%',
+      width: '1200px',
       height: '500px',
       minWidth: '500px',
     };
     return (
-      <div ref="map" style={mapStyle} onClick={this.handleClick}>
-        <input className="search-box" ref="autocomplete" type="text" style={this.state.inputStyle} placeholder="Escriba el lugar a buscar" onChange={this.hanleChange} />
+      <div>
+        <div ref="map" style={mapStyle} onClick={this.handleClick} />
+        <div className="ant-row ant-form-item">
+          <div className="ant-form-item-label ant-col-xs-25 ant-col-sm-2" style={{ marginTop: '10px' }}>
+            <label className="ant-form-item" title="Nombre">Dirección</label>
+          </div>
+          <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-15">
+            <div className="ant-form-item-control has-success">
+              <input className="ant-input" ref="autocomplete" type="text" style={this.state.inputStyle} placeholder="Escriba el lugar a buscar" onChange={this.hanleChange} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

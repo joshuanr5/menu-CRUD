@@ -4,9 +4,14 @@ import { Link } from 'dva/router';
 
 const Item = MenuAntd.Item;
 
-const Menus = () => {
+const Menus = ({ location }) => {
+  const route = location.pathname.split('/')[1];
+  const initialKey = [route === '' ? 'home' : route];
+  // const initialKey = ['local'];
+  console.log(initialKey);
+  // const initialKey = route === '' ? 'hombe' : route;
   return (
-    <MenuAntd mode="inline" >
+    <MenuAntd mode="inline" selectedKeys={initialKey}>
       <Item key="home" >
         <Link to="/" >
           <Icon type="home" />
@@ -31,7 +36,7 @@ const Menus = () => {
           {'testing'}
         </Link>
       </Item>
-    </MenuAntd>
+    </MenuAntd >
   );
 };
 

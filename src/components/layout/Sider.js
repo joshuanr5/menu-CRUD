@@ -4,8 +4,10 @@ import Menus from './Menus';
 
 const SiderAntd = Layout.Sider;
 
-const Sider = () => {
-  const menusProps = {};
+const Sider = ({ location }) => {
+  const menusProps = {
+    location,
+  };
 
   return (
     <SiderAntd width={150} style={{ background: '#fff' }} >

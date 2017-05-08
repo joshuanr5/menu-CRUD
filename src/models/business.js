@@ -93,10 +93,11 @@ export default {
         alertErrorVisible: payload.showAlert,
       };
     },
-    enableSaveButton(state) {
+    enableSaveButton(state, { payload }) {
+      console.log(payload);
       return {
         ...state,
-        saveButtonEnabled: true,
+        saveButtonEnabled: payload.buttonEnabled,
       };
     },
   },

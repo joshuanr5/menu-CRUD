@@ -48,7 +48,7 @@ class TimePicker extends React.Component {
         [type]: e.format('HH:mm'),
       },
     }, () => {
-      onChange(this.state.workingTime);
+      // onChange(this.state.workingTime);
     });
   };
 
