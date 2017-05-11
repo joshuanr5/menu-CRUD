@@ -211,16 +211,18 @@ class Map extends React.Component {
   }
 
   render() {
+    const mapWidth = screen.width * 45 / 100;
     const mapStyle = {
-      width: '1200px',
+      width: mapWidth,
       height: '500px',
       minWidth: '500px',
     };
+    console.log(mapWidth);
     return (
       <div>
         <div ref="map" style={mapStyle} onClick={this.handleClick} />
         <div className="ant-row ant-form-item">
-          <div className="ant-form-item-label ant-col-xs-25 ant-col-sm-2" style={{ marginTop: '10px' }}>
+          <div className="ant-form-item-label ant-col-xs-25 ant-col-sm-3" style={{ marginTop: '10px' }}>
             <label className="ant-form-item" title="Nombre">Dirección</label>
           </div>
           <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-15">

@@ -1,18 +1,17 @@
 import React from 'react';
 import { Router } from 'dva/router';
-
 import App from './routes/App';
 import Menu from './routes/menu';
 import Local from './routes/business';
 import Test from './routes/testing';
 
-const cached = {};
-function registerModel(app, model) {
-  if (!cached[model.namespace]) {
-    app.model(model);
-    cached[model.namespace] = true;
-  }
-}
+  // const cached = {};
+  // function registerModel(app, model) {
+  //   if (!cached[model.namespace]) {
+  //     app.model(model);
+  //     cached[model.namespace] = true;
+  //   }
+  // }
 
 export default ({ history }) => {
   const routes = [
