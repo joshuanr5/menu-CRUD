@@ -18,21 +18,45 @@ export default {
     facebookPage: null,
     logoPhoto: 'http://unsplash.it/341',
     coverPhoto: 'http://unsplash.it/342',
-    address: 'Jr. Alfonso Ugarte 115, La Merced, Comas',
-    coordinates: {
-      lat: -11.970391307222803,
-      lng: -77.05669935158994,
-    },
-    workingTime: {
-      MO: {
-        start: '12:00',
-        end: '22:00',
+
+    business_addresses: [
+      {
+        business_alias: 'Central',
+        address_name: 'Av. Aramburu 856',
+        coordinates: {
+          lat: -12.102469,
+          lng: -77.0236594,
+        },
+        working_time: [
+          {
+            day_code: 'MO',
+            day_name: 'Lunes',
+            working_hours: {
+              start: '09:00',
+              end: '15:00',
+            },
+          },
+          {
+            day_code: 'SU',
+            day_name: 'Domingo',
+            working_hours: {
+              start: '09:00',
+              end: '20:00',
+            },
+          },
+        ],
+        creation_date: '2017-05-08T17:25:45.835Z',
+        status: 'active',
+        id: '5910cc32c018311596f94fbd',
+        business_id: '5910a93c8f078c10a34e0fd7',
+        district_id: '5910cb58c018311596f94f9f',
+        district: {
+          name: 'Ate',
+          id: '5910cb58c018311596f94f9f',
+          city_id: '5910cb00c018311596f94f9d',
+        },
       },
-      SA: {
-        start: '12:00',
-        end: '22:00',
-      },
-    },
+    ],
     minOrderValue: 2,
     deliveryValue: 0,
     deliveryTime: 25,
@@ -40,6 +64,8 @@ export default {
     switchVisa: false,
     switchMastercard: false,
     switchDiners: true,
+
+    modalLocalVisible: false,
 
     // ui vars
     previewImage: '',
@@ -98,6 +124,25 @@ export default {
       return {
         ...state,
         saveButtonEnabled: payload.buttonEnabled,
+      };
+    },
+    editLocal(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+        modalLocalVisible: false,
+      };
+    },
+    showModal(state) {
+      return {
+        ...state,
+        modalLocalVisible: true,
+      };
+    },
+    closeModal(state) {
+      return {
+        ...state,
+        modalLocalVisible: false,
       };
     },
   },

@@ -37,6 +37,7 @@ class TimePicker extends React.Component {
           [type]: '',
         },
       }, () => {
+        console.log('hola');
         onChange(this.state.workingTime);
       });
       return;
@@ -48,7 +49,7 @@ class TimePicker extends React.Component {
         [type]: e.format('HH:mm'),
       },
     }, () => {
-      // onChange(this.state.workingTime);
+      onChange(this.state.workingTime);
     });
   };
 
@@ -67,7 +68,7 @@ class TimePicker extends React.Component {
     const { start, end } = this.state.workingTime;
     return (
       <Row >
-        <Col span={5} >
+        <Col span={6} >
           <TimePickerAntd
             defaultValue={moment(start, 'HH:mm')}
             disabledMinutes={this.disabledMinutes}
@@ -77,10 +78,10 @@ class TimePicker extends React.Component {
             onChange={this.handleChange.bind(null, 'start')}
           />
         </Col>
-        <Col span={1} >
+        <Col span={2} >
           <p className="ant-form-split">a</p>
         </Col>
-        <Col span={5} >
+        <Col span={6} >
           <TimePickerAntd
             defaultValue={moment(end, 'HH:mm')}
             disabledMinutes={this.disabledMinutes}

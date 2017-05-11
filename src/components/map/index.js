@@ -1,6 +1,6 @@
 import React from 'react';
-import omit from 'lodash/omit';
 import { Spin } from 'antd';
+import omit from 'lodash/omit';
 import GoogleApiComponent from '../../lib/google/GoogleApiComponent';
 import Map from './Map';
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Row, Col } from 'antd';
 import './Map.less';
 
 const mapStyles = [
@@ -25,17 +24,9 @@ const mapStyles = [
   },
 ];
 
+const circleRadius = 75;
 
 class Map extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputStyle: {
-        marginTop: '10px',
-      },
-    };
-  }
-
   componentDidMount() {
     this.loadMap();
     this.loadSearchBox(this.props.currentAddress);
@@ -45,9 +36,9 @@ class Map extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     let mustRender = nextProps.mustRender;
-    if (JSON.stringify(this.state.inputStyle) !== JSON.stringify(nextState.inputStyle)) {
-      mustRender = true;
-    }
+    // if (JSON.stringify(this.state.inputStyle) !== JSON.stringify(nextState.inputStyle)) {
+    //   mustRender = true;
+    // }
     return mustRender;
   }
 
@@ -120,7 +111,7 @@ class Map extends React.Component {
       const lastLocation = this.circle.getCenter();
       const distance = this.props.google.maps.geometry.spherical.computeDistanceBetween(lastLocation, latLng);
 
-      if (distance > 100) {
+      if (distance > circleRadius) {
         this.circle.setCenter(latLng);
         this.setAddress({ lat: latLng.lat(), lng: latLng.lng() });
       }
@@ -134,9 +125,10 @@ class Map extends React.Component {
     if (this.circle) return;
     this.circle = new this.props.google.maps.Circle({
       map: this.map,
-      radius: 100,
+      radius: circleRadius,
       fillCOlor: '#FF0000',
-      fillOpacity: 0.15,
+      fillOpacity: 0.2,
+      strokeWeight: '1px',
     });
     this.circle.setCenter(this.map.getCenter());
   }
@@ -156,11 +148,10 @@ class Map extends React.Component {
       if (this.timer) {
         clearTimeout(this.timer);
       }
-
       const places = this.searchBox.getPlaces();
       const place = places[0];
       if (!place) return;
-
+      console.log(place);
       this.map.setCenter(place.geometry.location);
       this.map.setZoom(18);
 
@@ -190,12 +181,11 @@ class Map extends React.Component {
     this.timer = setTimeout(() => {
       this.functionTimer(value);
       this.props.setAddress(value);
-    }, 500);
+    }, 0);
   }
 
   functionTimer(value) {
     if (value === '') {
-      this.changeColor('black');
       return;
     }
 
@@ -203,31 +193,28 @@ class Map extends React.Component {
     const service = new google.maps.places.AutocompleteService();
     service.getPlacePredictions({ input: value }, (prediction, status) => {
       if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-        this.changeColor('red');
       } else {
-        this.changeColor('black');
       }
     });
   }
 
   render() {
-    const mapWidth = screen.width * 45 / 100;
+    const mapWidth = screen.width / 4;
     const mapStyle = {
-      width: mapWidth,
-      height: '500px',
-      minWidth: '500px',
+      width: '100%',
+      height: '300px',
     };
     console.log(mapWidth);
     return (
       <div>
         <div ref="map" style={mapStyle} onClick={this.handleClick} />
         <div className="ant-row ant-form-item">
-          <div className="ant-form-item-label ant-col-xs-25 ant-col-sm-3" style={{ marginTop: '10px' }}>
+          <div className="ant-form-item-label " >
             <label className="ant-form-item" title="Nombre">Dirección</label>
           </div>
-          <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-15">
+          <div className="ant-form-item-control-wrapper">
             <div className="ant-form-item-control has-success">
-              <input className="ant-input" ref="autocomplete" type="text" style={this.state.inputStyle} placeholder="Escriba el lugar a buscar" onChange={this.hanleChange} />
+              <input className="ant-input" ref="autocomplete" type="text" placeholder="Escriba el lugar a buscar" onChange={this.hanleChange} />
             </div>
           </div>
         </div>
